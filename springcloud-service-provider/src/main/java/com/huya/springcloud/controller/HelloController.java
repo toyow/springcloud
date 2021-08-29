@@ -1,6 +1,8 @@
 package com.huya.springcloud.controller;
 
 import com.huya.springcloud.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,9 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/service")
 public class HelloController {
+    @Autowired
+    private Environment environment;
+
     @RequestMapping("/hello")
     public String Hello() {
-        return "hello provider2";
+        return environment.getProperty("hello");
     }
 
     @RequestMapping("/user")

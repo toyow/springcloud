@@ -1,6 +1,7 @@
 package com.huya.springcloud.controller;
 
 import com.huya.springcloud.model.User;
+import com.huya.springcloud.service.HelloService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,71 +21,80 @@ import java.util.Map;
 @RestController
 @RefreshScope
 public class WebController {
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Autowired
     private Environment environment;
 
+    @Autowired
+    private HelloService helloService;
+
+
     @RequestMapping("/web/hello")
     public String hello() {
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://SPRINGCLOUD-SERVICE-PROVIDER/service/hello", String.class);
-        HttpStatus code = responseEntity.getStatusCode();
-        if (code == HttpStatus.OK) {
-            return responseEntity.getBody();
-        } else {
-            return "err";
-        }
+        //调用声明式的接口方法，实现对远程服务的调用
+        String config = environment.getProperty("config");
+        return helloService.hello() + config;
     }
 
-    @RequestMapping("/web/userById")
-    public User user() {
-        Map<String, String> map = new HashMap<>(2);
-        map.put("id", "2");
-        map.put("name", "test");
-        ResponseEntity<User> responseEntity = restTemplate.getForEntity("http://SPRINGCLOUD-SERVICE-PROVIDER/service/userById?id={id}&name={name}", User.class, map);
-        HttpStatus code = responseEntity.getStatusCode();
-        if (code == HttpStatus.OK) {
-            return responseEntity.getBody();
-        } else {
-            return null;
-        }
-    }
-
-    @RequestMapping("/web/addUser")
-    public User addUser() {
-        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>(2);
-        multiValueMap.add("id", "2");
-        multiValueMap.add("name", "test");
-        ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://SPRINGCLOUD-SERVICE-PROVIDER/service/addUser", multiValueMap, User.class);
-        HttpStatus code = responseEntity.getStatusCode();
-        if (code == HttpStatus.OK) {
-            return responseEntity.getBody();
-        } else {
-            return null;
-        }
-    }
-
-
-    @RequestMapping("/web/helloHytrix")
-    @HystrixCommand(fallbackMethod = "hystrixError", ignoreExceptions = RuntimeException.class, commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "15000")})
-    public String helloHytrix() {
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://SPRINGCLOUD-SERVICE-PROVIDER/service/hello", String.class);
-        HttpStatus code = responseEntity.getStatusCode();
-        if (code == HttpStatus.OK) {
-            String config = environment.getProperty("config");
-            String body = responseEntity.getBody();
-            return config + body;
-        } else {
-            return "err";
-        }
-    }
-
-    public String hystrixError(Throwable throwable) {
-        if (!"".equals(throwable.getMessage())) {
-            return throwable.getMessage();
-        }
-        return "HystrixError";
-    }
+//    @RequestMapping("/web/hello")
+//    public String hello() {
+//        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://SPRINGCLOUD-SERVICE-PROVIDER/service/hello", String.class);
+//        HttpStatus code = responseEntity.getStatusCode();
+//        if (code == HttpStatus.OK) {
+//            return responseEntity.getBody();
+//        } else {
+//            return "err";
+//        }
+//    }
+//
+//    @RequestMapping("/web/userById")
+//    public User user() {
+//        Map<String, String> map = new HashMap<>(2);
+//        map.put("id", "2");
+//        map.put("name", "test");
+//        ResponseEntity<User> responseEntity = restTemplate.getForEntity("http://SPRINGCLOUD-SERVICE-PROVIDER/service/userById?id={id}&name={name}", User.class, map);
+//        HttpStatus code = responseEntity.getStatusCode();
+//        if (code == HttpStatus.OK) {
+//            return responseEntity.getBody();
+//        } else {
+//            return null;
+//        }
+//    }
+//
+//    @RequestMapping("/web/addUser")
+//    public User addUser() {
+//        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>(2);
+//        multiValueMap.add("id", "2");
+//        multiValueMap.add("name", "test");
+//        ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://SPRINGCLOUD-SERVICE-PROVIDER/service/addUser", multiValueMap, User.class);
+//        HttpStatus code = responseEntity.getStatusCode();
+//        if (code == HttpStatus.OK) {
+//            return responseEntity.getBody();
+//        } else {
+//            return null;
+//        }
+//    }
+//
+//
+//    @RequestMapping("/web/helloHytrix")
+//    @HystrixCommand(fallbackMethod = "hystrixError", ignoreExceptions = RuntimeException.class, commandProperties = {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "15000")})
+//    public String helloHytrix() {
+//        ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://SPRINGCLOUD-SERVICE-PROVIDER/service/hello", String.class);
+//        HttpStatus code = responseEntity.getStatusCode();
+//        if (code == HttpStatus.OK) {
+//            String config = environment.getProperty("config");
+//            String body = responseEntity.getBody();
+//            return config + body;
+//        } else {
+//            return "err";
+//        }
+//    }
+//
+//    public String hystrixError(Throwable throwable) {
+//        if (!"".equals(throwable.getMessage())) {
+//            return throwable.getMessage();
+//        }
+//        return "HystrixError";
+//    }
 
 }
