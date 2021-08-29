@@ -33,7 +33,7 @@ public class WebController {
     public String hello() {
         //调用声明式的接口方法，实现对远程服务的调用
         String config = environment.getProperty("config");
-        return helloService.hello() + config;
+        return helloService.Hello() + config;
     }
 
 //    @RequestMapping("/web/hello")

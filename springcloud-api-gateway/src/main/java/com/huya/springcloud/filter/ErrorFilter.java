@@ -48,7 +48,7 @@ public class ErrorFilter extends ZuulFilter {
             PrintWriter writer = null;
             try {
                 writer = response.getWriter();
-                writer.print("{code:" + exception.nStatusCode + ", message111:\"" + exception.getMessage() + "\"}");
+                writer.print("{code:" + exception.nStatusCode + ", message:\"" + exception.getMessage() + "\"}");
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

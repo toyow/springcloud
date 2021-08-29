@@ -15,7 +15,9 @@ public class HelloController {
     private Environment environment;
 
     @RequestMapping("/hello")
-    public String Hello() {
+    public String Hello() throws InterruptedException {
+//        Integer a=1/0;
+       // Thread.sleep(4000);
         return environment.getProperty("hello");
     }
 

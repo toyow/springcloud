@@ -1,11 +1,13 @@
 package com.huya.springcloud.service;
 
 
+import com.huya.springcloud.fallback.MyFallback;
 import com.huya.springcloud.fallback.MyFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient(name="springcloud-service-provider", /*fallback = MyFallback.class*/ fallbackFactory = MyFallbackFactory.class)
+//@FeignClient(name="springcloud-service-provider", fallback = MyFallback.class)
 public interface HelloService {
 
     /**
@@ -14,5 +16,5 @@ public interface HelloService {
      * @return
      */
     @RequestMapping("/service/hello")
-    public String hello();
+    public String Hello();
 }
