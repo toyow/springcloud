@@ -1,0 +1,14 @@
+server:
+  port: 8082
+eureka:
+  instance:
+    hostname: eureka8082
+  server:
+    #自我保护机制，即注册的服务断网，不剔除
+    enable-self-preservation: false
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    #    service-url.defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    service-url:
+      defaultZone: http://eureka8083:8083/eureka/

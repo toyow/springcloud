@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+      profile: dev
+      label: master
+      uri: http://localhost:8889/
+      username: wudongyang1
+      password: 123321
+      name: application

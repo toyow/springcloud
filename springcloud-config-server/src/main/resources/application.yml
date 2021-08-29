@@ -1,0 +1,24 @@
+#配置服务内嵌的Tomcat端口
+server:
+  port: 8889
+
+  #配置服务的名称
+spring:
+  application:
+    name: springcloud-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/toyow/springcloud-config-server.git
+          search-paths: config-center
+          username: toyow@mail.ustc.edu.cn
+          password: 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
+  security:
+    user:
+      name:
+        wudongyang1
+      password:
+        123321
+
+

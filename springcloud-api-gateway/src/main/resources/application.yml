@@ -1,0 +1,41 @@
+#配置服务内嵌的Tomcat端口
+server:
+  port: 8888
+
+  #配置服务的名称
+spring:
+  application:
+    name: springcloud-api-gateway
+#  zipkin:
+#    base-url: http://localhost:9411
+#    sender:
+#      type: web
+#  sleuth:
+#    sampler:
+#      probability: 1.0
+
+  #配置API网关到注册中心上，API网关也将作为一个服务注册到eureka-server上
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka8083:8082/eureka/,http://eureka8083:8083/eureka/
+
+#配置路由规则
+#url路由
+#转发目标服务
+zuul:
+  routes:
+    springcloud-service-consumer: /consumer/**
+  ignored-services: springcloud-service-provider
+  prefix: /auth
+  SendErrorFilter:
+    error:
+      disable: true
+
+
+#默认会为每个注册中心的服务进行过滤，即用服务名命名
+#如springcloud-service-provider就是 /springcloud-service-provider/url
+
+#指定禁止路由的服务
+
+
