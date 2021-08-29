@@ -2,7 +2,7 @@ spring:
   cloud:
     config:
       profile: dev
-      label: master
+      label: develop
       uri: http://localhost:8889/
       username: wudongyang1
       password: 123321
