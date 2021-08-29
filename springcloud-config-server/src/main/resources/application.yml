@@ -10,7 +10,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/toyow/springcloud-config-server.git
+          uri: https://github.com/toyow/springcloud.git
           search-paths: config-center
           username: toyow@mail.ustc.edu.cn
           password: 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
